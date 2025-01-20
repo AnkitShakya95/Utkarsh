@@ -1,7 +1,3 @@
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
-
 import os
 import re
 import sys
@@ -33,54 +29,166 @@ bot = Client(
     bot_token=BOT_TOKEN)
 
 
+Extras 
+failed_links = []  # List to store failed links
+fail_cap =f"**➜ This file Contain Failed Downloads while Downloding \n You Can Retry them one more time **"
+
+# counter 
+global videocount, pdfcount  # Declare videocount and pdfcount as global variables
+
+#url var 
+pwdl = os.environ.get("api")
+
+processing_request = False  # Variable to track if a request is being processed
+
+
+keyboard = InlineKeyboardMarkup(
+    [
+        [
+            InlineKeyboardButton(
+                text="👨🏻‍💻 Devloper",
+                url="https://t.me/ANKIT_SHAKYA72",
+            ),
+            InlineKeyboardButton(
+                text="❣️ GITHUB",
+                url="https://t.me/ANKIT_SHAKYA72",
+            ),
+        ],
+        [
+            InlineKeyboardButton(
+                text="🪄 Updates Channel",
+                url="https://t.me/ANKIT_SHAKYA73",
+            ),
+            
+        ],
+    ]
+)
+
+
+
+Busy = InlineKeyboardMarkup(
+    [
+        [
+            InlineKeyboardButton(
+                text="👨🏻‍💻 Devloper",
+                url="https://t.me/ANKIT_SHAKYA72",
+            ),
+            InlineKeyboardButton(
+                text="❣️ GITHUB",
+                url="https://t.me/ANKIT_SHAKYA72",
+            ),
+        ],
+        [
+            InlineKeyboardButton(
+                text="Join to Check My Status ",
+                url="https://t.me/ANKIT_SHAKYA72",
+            ),
+            
+        ],
+    ]
+)
+
+
+@bot.on_message(filters.command(["logs"]) )
+async def send_logs(bot: Client, m: Message):
+    try:
+        
+        # Assuming `assist.txt` is located in the current directory
+         with open("Assist.txt", "rb") as file:
+            sent= await m.reply_text("**📤 Sending you ....**")
+            await m.reply_document(document=file)
+            await sent.delete(True)
+    except Exception as e:
+        await m.reply_text(f"Error sending logs: {e}")
+
+
+# List of image URLs
+image_urls = [
+    "http://graph.org/file/1952368384059649513e1.jpg",
+    "http://graph.org/file/8678c337223acb5b4dffb.jpg",
+    "http://graph.org/file/f00ef9f87f094bbddf0df.jpg",
+    "http://graph.org/file/1952368384059649513e1.jpg",
+    "http://graph.org/file/8678c337223acb5b4dffb.jpg",
+    "http://graph.org/file/f00ef9f87f094bbddf0df.jpg",
+    # Add more image URLs as needed
+]
+
 @bot.on_message(filters.command(["start"]))
-async def start(bot: Client, m: Message):
-    await m.reply_text(f"<b>Hello {m.from_user.mention} 👋\n\n I Am A Bot For Download Links From Your **.TXT** File And Then Upload That File On Telegram So Basically If You Want To Use Me First Send Me /upload Command And Then Follow Few Steps..\n\nUse /stop to stop any ongoing task I am made by @justt_sam_09.</b>")
+async def start_command(bot: Client, message: Message):
+    # Send a loading message with emoji
+    loading_message = await bot.send_message(
+        chat_id=message.chat.id,
+        text="Loading... ⏳🔄"
+    )
+  
+    # Choose a random image URL from the list
+    random_image_url = random.choice(image_urls)
+    
+    # Caption for the image
+    caption = (
+        "**𝐇𝐞𝐥𝐥𝐨 𝐃𝐞𝐚𝐫  👋!\n\n"
+        "➠ 𝐈 𝐚𝐦 𝐚 𝐓𝐞𝐱𝐭 𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝𝐞𝐫 𝐁𝐨𝐭 𝐌𝐚𝐝𝐞 𝐖𝐢𝐭𝐡 ♥️\n"
+        "➠ Can Extract Videos & Pdf From Your Text File and Upload to Telegram\n\n"
+        "➠ 𝐔𝐬𝐞 /ankit 𝐂𝐨𝐦𝐦𝐚𝐧𝐝 𝐓𝐨 𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝 𝐅𝐫𝐨𝐦 𝐓𝐗𝐓 𝐅𝐢𝐥𝐞\n\n"
+        "➠𝐌𝐚𝐝𝐞 𝐁𝐲: @ANKIT_SHAKYA72 **"
+    )
+
+    # Send the image with the caption
+    await bot.send_photo(
+        chat_id=message.chat.id,
+        photo=random_image_url,
+        caption=caption,
+        reply_markup=keyboard
+    )
 
 
-@bot.on_message(filters.command("stop"))
+
+
+@bot.on_message(filters.command(["stop"]) )
 async def restart_handler(_, m):
-    await m.reply_text("**Stopped**🚦", True)
+    await m.reply_text("**STOPPED**🛑", True)
     os.execl(sys.executable, sys.executable, *sys.argv)
+    
 
-
-
-@bot.on_message(filters.command(["sameer"]))
-async def sameer(bot: Client, m: Message):
-    editable = await m.reply_text('𝕤ᴇɴᴅ ᴛxᴛ ғɪʟᴇ ⚡️')
+@bot.on_message(filters.command(["ankit","upload"]))
+async def txt_handler(bot: Client, m: Message):
+    editable = await m.reply_text(f"**🔹Send me the TXT file and wait.**")
     input: Message = await bot.listen(editable.chat.id)
     x = await input.download()
     await input.delete(True)
-
-    path = f"./downloads/{m.chat.id}"
-
-    try:
-       with open(x, "r") as f:
-           content = f.read()
-       content = content.split("\n")
-       links = []
-       for i in content:
-           links.append(i.split("://", 1))
-       os.remove(x)
-            # print(len(links)
+    file_name, ext = os.path.splitext(os.path.basename(x))
+    credit = f"𝐀𝐍𝐊𝐈𝐓 𝐒𝐇𝐀𝐊𝐘𝐀™🇮🇳"
+    try:    
+        with open(x, "r") as f:
+            content = f.read()
+        content = content.split("\n")
+        links = []
+        for i in content:
+            links.append(i.split("://", 1))
+        os.remove(x)
     except:
-           await m.reply_text("**Invalid file input.**")
-           os.remove(x)
-           return
-    
+        await m.reply_text("Invalid file input.")
+        os.remove(x)
+        return
    
-    await editable.edit(f"**𝕋ᴏᴛᴀʟ ʟɪɴᴋ𝕤 ғᴏᴜɴᴅ ᴀʀᴇ🔗🔗** **{len(links)}**\n\n**𝕊ᴇɴᴅ 𝔽ʀᴏᴍ ᴡʜᴇʀᴇ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ ɪɴɪᴛɪᴀʟ ɪ𝕤** **1**")
+    await editable.edit(f"Total links found are **{len(links)}**\n\nSend From where you want to download initial is **1**")
     input0: Message = await bot.listen(editable.chat.id)
     raw_text = input0.text
     await input0.delete(True)
-
-    await editable.edit("**Now Please Send Me Your Batch Name**")
+    try:
+        arg = int(raw_text)
+    except:
+        arg = 1
+    await editable.edit("**Enter Your Batch Name or send d for grabing from text filename.**")
     input1: Message = await bot.listen(editable.chat.id)
     raw_text0 = input1.text
     await input1.delete(True)
-    
+    if raw_text0 == 'd':
+        b_name = file_name
+    else:
+        b_name = raw_text0
 
-    await editable.edit("**𝔼ɴᴛᴇʀ ʀᴇ𝕤ᴏʟᴜᴛɪᴏɴ📸**\n144,240,360,480,720,1080 please choose quality")
+    await editable.edit("**Enter resolution.\n Eg : 480 or 720**")
     input2: Message = await bot.listen(editable.chat.id)
     raw_text2 = input2.text
     await input2.delete(True)
@@ -102,19 +210,16 @@ async def sameer(bot: Client, m: Message):
     except Exception:
             res = "UN"
     
-    
-
-    await editable.edit("Now Enter A Caption to add caption on your uploaded file")
+    await editable.edit("**Enter Your Name or send 'de' for use default.\n Eg : 𝐀𝐍𝐊𝐈𝐓 𝐒𝐇𝐀𝐊𝐘𝐀™👨🏻‍💻**")
     input3: Message = await bot.listen(editable.chat.id)
     raw_text3 = input3.text
     await input3.delete(True)
-    highlighter  = f"️ ⁪⁬⁮⁮⁮"
-    if raw_text3 == 'Robin':
-        MR = highlighter 
+    if raw_text3 == 'de':
+        CR = credit
     else:
-        MR = raw_text3
-   
-    await editable.edit("Now send the Thumb url/nEg » https://graph.org/file/ce1723991756e48c35aa1.jpg \n Or if don't want thumbnail send = no")
+        CR = raw_text3
+        
+    await editable.edit("Now send the **Thumb url**\n**Eg :** ``\n\nor Send `no`")
     input6 = message = await bot.listen(editable.chat.id)
     raw_text6 = input6.text
     await input6.delete(True)
@@ -127,11 +232,9 @@ async def sameer(bot: Client, m: Message):
     else:
         thumb == "no"
 
-    if len(links) == 1:
-        count = 1
-    else:
-        count = int(raw_text)
+    count =int(raw_text)
 
+        
     try:
         for i in range(count - 1, len(links)):
 
@@ -165,9 +268,9 @@ async def sameer(bot: Client, m: Message):
                 cmd = f'yt-dlp -f "{ytf}" "{url}" -o "{name}.mp4"'
 
             try:  
-                
-                cc = f'**[📽️] Vid_ID:** {str(count).zfill(3)}.** {𝗻𝗮𝗺𝗲𝟭}{MR}.mkv\n**𝔹ᴀᴛᴄʜ** » **{raw_text0}**'
-                cc1 = f'**[📁] Pdf_ID:** {str(count).zfill(3)}. {𝗻𝗮𝗺𝗲𝟭}{MR}.pdf \n**𝔹ᴀᴛᴄʜ** » **{raw_text0}**'
+                cc = f'**🎞️ VID_ID: {str(count).zfill(3)}.\n\n Title: {name1} @Ankit_Shakya73 {res}.mkv\n\n📚 Batch Name: {b_name}\n\n📥 Extracted By : {CR}\n\n**━━━━━✦𝐀𝐍𝐊𝐈𝐓❤️✦━━━━━**'
+                cc1 = f'**📁 PDF_ID: {str(count).zfill(3)}.\n\n Title: {name1} @Ankit_Shakya73.pdf\n\n📚 Batch Name: {b_name}\n\n📥 Extracted By : {CR}\n\n**━━━━━✦𝐀𝐍𝐊𝐈𝐓❤️✦━━━━━**'
+                    
                 if "drive" in url:
                     try:
                         ka = await helper.download(url, name)
@@ -193,7 +296,7 @@ async def sameer(bot: Client, m: Message):
                         time.sleep(e.x)
                         continue
                 else:
-                    Show = f"**⥥ 🄳🄾🅆🄽🄻🄾🄰🄳🄸🄽🄶⬇️⬇️... »**\n\n**📝Name »** `{name}\n❄Quality » {raw_text2}`\n\n**🔗URL »** `{url}`"
+                    Show = f"**⥥ 𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝𝐢𝐧𝐠 »**\n\n**📝Name »** `{name}\n⌨️Quality » {raw_text2}`\n\n**🔗URL »** `{url}`"
                     prog = await m.reply_text(Show)
                     res_file = await helper.download_video(url, cmd, name)
                     filename = res_file
@@ -210,7 +313,8 @@ async def sameer(bot: Client, m: Message):
 
     except Exception as e:
         await m.reply_text(e)
-    await m.reply_text("**Ho Gya Bhai **")
+    await m.reply_text("**🔰Done🔰**")
+    await m.reply_text("**✨Thanks For Choosing**")
 
 
 bot.run()
