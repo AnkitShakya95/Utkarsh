@@ -28,119 +28,58 @@ bot = Client(
     api_hash=API_HASH,
     bot_token=BOT_TOKEN)
 
+my_name = "𝐀𝐍𝐊𝐈𝐓❤️"
 
+cookies_file_path = os.getenv("COOKIES_FILE_PATH", "youtube_cookies.txt")
 
-
-# counter 
-global videocount, pdfcount  # Declare videocount and pdfcount as global variables
-
-#url var 
-pwdl = os.environ.get("api")
-
-processing_request = False  # Variable to track if a request is being processed
-
-
-keyboard = InlineKeyboardMarkup(
-    [
-        [
-            InlineKeyboardButton(
-                text="👨🏻‍💻 Devloper",
-                url="https://t.me/ANKIT_SHAKYA72",
-            ),
-            InlineKeyboardButton(
-                text="❣️ GITHUB",
-                url="https://t.me/ANKIT_SHAKYA72",
-            ),
-        ],
-        [
-            InlineKeyboardButton(
-                text="🪄 Updates Channel",
-                url="https://t.me/ANKIT_SHAKYA73",
-            ),
-            
-        ],
-    ]
-)
-
-
-
-Busy = InlineKeyboardMarkup(
-    [
-        [
-            InlineKeyboardButton(
-                text="👨🏻‍💻 Devloper",
-                url="https://t.me/ANKIT_SHAKYA72",
-            ),
-            InlineKeyboardButton(
-                text="❣️ GITHUB",
-                url="https://t.me/ANKIT_SHAKYA72",
-            ),
-        ],
-        [
-            InlineKeyboardButton(
-                text="Join to Check My Status ",
-                url="https://t.me/ANKIT_SHAKYA72",
-            ),
-            
-        ],
-    ]
-)
-
-
-@bot.on_message(filters.command(["logs"]) )
-async def send_logs(bot: Client, m: Message):
-    try:
-        
-        # Assuming `assist.txt` is located in the current directory
-         with open("Assist.txt", "rb") as file:
-            sent= await m.reply_text("**📤 Sending you ....**")
-            await m.reply_document(document=file)
-            await sent.delete(True)
-    except Exception as e:
-        await m.reply_text(f"Error sending logs: {e}")
-
-
-# List of image URLs
-image_urls = [
-    "http://graph.org/file/1952368384059649513e1.jpg",
-    "http://graph.org/file/8678c337223acb5b4dffb.jpg",
-    "http://graph.org/file/f00ef9f87f094bbddf0df.jpg",
-    "http://graph.org/file/1952368384059649513e1.jpg",
-    "http://graph.org/file/8678c337223acb5b4dffb.jpg",
-    "http://graph.org/file/f00ef9f87f094bbddf0df.jpg",
-    # Add more image URLs as needed
-]
-
-@bot.on_message(filters.command(["start"]))
-async def start_command(bot: Client, message: Message):
-    # Send a loading message with emoji
-    loading_message = await bot.send_message(
-        chat_id=message.chat.id,
-        text="Loading... ⏳🔄"
+class Data:
+    START = (
+        "🌟 Welcome {0}! 🌟\n\n"
     )
-  
-    # Choose a random image URL from the list
-    random_image_url = random.choice(image_urls)
+# Define the start command handler
+@bot.on_message(filters.command("start"))
+async def start(client: Client, msg: Message):
+    user = await client.get_me()
+    mention = user.mention
+    start_message = await client.send_message(
+        msg.chat.id,
+        Data.START.format(msg.from_user.mention)
+    )
+
+    await asyncio.sleep(1)
+    await start_message.edit_text(
+        Data.START.format(msg.from_user.mention) +
+        "Initializing Uploader bot... 🤖\n\n"
+        "Progress: [⬜⬜⬜⬜⬜⬜⬜⬜⬜] 0%\n\n"
+    )
+
+    await asyncio.sleep(1)
+    await start_message.edit_text(
+        Data.START.format(msg.from_user.mention) +
+        "Loading features... ⏳\n\n"
+        "Progress: [🟥🟥🟥⬜⬜⬜⬜⬜⬜] 25%\n\n"
+    )
     
-    # Caption for the image
-    caption = (
-        "**𝐇𝐞𝐥𝐥𝐨 𝐃𝐞𝐚𝐫  👋!\n\n"
-        "➠ 𝐈 𝐚𝐦 𝐚 𝐓𝐞𝐱𝐭 𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝𝐞𝐫 𝐁𝐨𝐭 𝐌𝐚𝐝𝐞 𝐖𝐢𝐭𝐡 ♥️\n"
-        "➠ Can Extract Videos & Pdf From Your Text File and Upload to Telegram\n\n"
-        "➠ 𝐔𝐬𝐞 /ankit 𝐂𝐨𝐦𝐦𝐚𝐧𝐝 𝐓𝐨 𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝 𝐅𝐫𝐨𝐦 𝐓𝐗𝐓 𝐅𝐢𝐥𝐞\n\n"
-        "➠𝐌𝐚𝐝𝐞 𝐁𝐲: @ANKIT_SHAKYA72 **"
+    await asyncio.sleep(1)
+    await start_message.edit_text(
+        Data.START.format(msg.from_user.mention) +
+        "This may take a moment, sit back and relax! 😊\n\n"
+        "Progress: [🟧🟧🟧🟧🟧⬜⬜⬜⬜] 50%\n\n"
     )
 
-    # Send the image with the caption
-    await bot.send_photo(
-        chat_id=message.chat.id,
-        photo=random_image_url,
-        caption=caption,
-        reply_markup=keyboard
+    await asyncio.sleep(1)
+    await start_message.edit_text(
+        Data.START.format(msg.from_user.mention) +
+        "Checking Bot Status... 🔍\n\n"
+        "Progress: [🟨🟨🟨🟨🟨🟨🟨⬜⬜] 75%\n\n"
     )
 
-
-
+    await asyncio.sleep(1)
+    await start_message.edit_text(
+        Data.START.format(msg.from_user.mention) +
+        "Checking status Ok... Command Nhi Bataunga **Bot Made BY 𝐀𝐍𝐊𝐈𝐓 𝐒𝐇𝐀𝐊𝐘𝐀™👨🏻‍💻**🔍\n\n"
+        "Progress:[🟩🟩🟩🟩🟩🟩🟩🟩🟩] 100%\n\n"
+    )
 
 @bot.on_message(filters.command(["stop"]) )
 async def restart_handler(_, m):
@@ -245,12 +184,25 @@ async def txt_handler(bot: Client, m: Message):
                         text = await resp.text()
                         url = re.search(r"(https://.*?playlist.m3u8.*?)\"", text).group(1)
 
-            elif 'videos.classplusapp' in url:
+            elif 'videos.classplusapp' in url or "tencdn.classplusapp" in url or "webvideos.classplusapp.com" in url or "media-cdn-alisg.classplusapp.com" in url or "videos.classplusapp" in url or "videos.classplusapp.com" in url or "media-cdn-a.classplusapp" in url or "media-cdn.classplusapp" in url:
              url = requests.get(f'https://api.classplusapp.com/cams/uploader/video/jw-signed-url?url={url}', headers={'x-access-token': 'eyJhbGciOiJIUzM4NCIsInR5cCI6IkpXVCJ9.eyJpZCI6MzgzNjkyMTIsIm9yZ0lkIjoyNjA1LCJ0eXBlIjoxLCJtb2JpbGUiOiI5MTcwODI3NzQyODkiLCJuYW1lIjoiQWNlIiwiZW1haWwiOm51bGwsImlzRmlyc3RMb2dpbiI6dHJ1ZSwiZGVmYXVsdExhbmd1YWdlIjpudWxsLCJjb3VudHJ5Q29kZSI6IklOIiwiaXNJbnRlcm5hdGlvbmFsIjowLCJpYXQiOjE2NDMyODE4NzcsImV4cCI6MTY0Mzg4NjY3N30.hM33P2ai6ivdzxPPfm01LAd4JWv-vnrSxGXqvCirCSpUfhhofpeqyeHPxtstXwe0'}).json()['url']
 
+            elif "apps-s3-jw-prod.utkarshapp.com" in url:
+                if 'enc_plain_mp4' in url:
+                    url = url.replace(url.split("/")[-1], res+'.mp4')
+                    
+                elif 'Key-Pair-Id' in url:
+                    url = None
+                    
+                elif '.m3u8' in url:
+                    q = ((m3u8.loads(requests.get(url).text)).data['playlists'][1]['uri']).split("/")[0]
+                    x = url.split("/")[5]
+                    x = url.replace(x, "")
+                    url = ((m3u8.loads(requests.get(url).text)).data['playlists'][1]['uri']).replace(q+"/", x)
+                    
             elif '/master.mpd' in url:
-             id =  url.split("/")[-2]
-             url =  "https://d26g5bnklkwsh4.cloudfront.net/" + id + "/master.m3u8"
+             vid_id =  url.split("/")[-2]
+             url =  f"https://pw-url-api-v1mf.onrender.com/process?v=https://sec1.pw.live/{vid_id}/master.mpd&quality={raw_text2}"
 
             name1 = links[i][0].replace("\t", "").replace(":", "").replace("/", "").replace("+", "").replace("#", "").replace("|", "").replace("@", "").replace("*", "").replace(".", "").replace("https", "").replace("http", "").strip()
             name = f'{str(count).zfill(3)}) {name1[:60]}'
