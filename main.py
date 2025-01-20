@@ -29,9 +29,7 @@ bot = Client(
     bot_token=BOT_TOKEN)
 
 
-Extras 
-failed_links = []  # List to store failed links
-fail_cap =f"**➜ This file Contain Failed Downloads while Downloding \n You Can Retry them one more time **"
+
 
 # counter 
 global videocount, pdfcount  # Declare videocount and pdfcount as global variables
